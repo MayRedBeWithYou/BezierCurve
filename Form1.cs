@@ -75,6 +75,13 @@ namespace Project3
 
         private List<Point> Bezier { get; set; } = new List<Point>();
 
+        private List<Vector2> Tangents { get; set; } = new List<Vector2>();
+
+        private int deg = 0;
+        private double Degree => deg * Math.PI / 180;
+
+        private double Tan => Math.Atan2(Tangents[currentPoint].Y, Tangents[currentPoint].X);
+
         public Form1()
         {
             InitializeComponent();
@@ -82,16 +89,26 @@ namespace Project3
             BitmapCanvas.Image = bitmap;
             image = new Bitmap(Project3.Properties.Resources.check);
             thumbnail = new Bitmap(image, new Size(50, 50));
-            grayscaleImage = new Bitmap(Project3.Properties.Resources.check);
+            grayscaleImage = new Bitmap(image);
+            for (int x = 0; x < grayscaleImage.Width; x++)
+            {
+                for (int y = 0; y < grayscaleImage.Height; y++)
+                {
+                    Color color = grayscaleImage.GetPixel(x, y);
+                    int grayScale = (int)((color.R * 0.3) + (color.G * 0.59) + (color.B * 0.11));
+                    Color newColor = Color.FromArgb(color.A, grayScale, grayScale, grayScale);
+                    grayscaleImage.SetPixel(x, y, newColor);
+                }
+            }
             grayscaleThumbnail = new Bitmap(grayscaleImage, new Size(50, 50));
 
             ImageBox.Image = thumbnail;
             ImageBox.Refresh();
 
-            Start.Position = new Vector2(BitmapCanvas.Width / 3, BitmapCanvas.Height / 2);
+            Start.Position = new Vector2(BitmapCanvas.Width / 5, BitmapCanvas.Height / 2);
             Start.Size = 11;
             End.Size = 11;
-            End.Position = new Vector2(2 * BitmapCanvas.Width / 3, BitmapCanvas.Height / 2 + 2);
+            End.Position = new Vector2(4 * BitmapCanvas.Width / 5, BitmapCanvas.Height / 2 + 1);
             Start.Color = Color.DarkRed;
             End.Color = Color.DarkRed;
 
@@ -102,6 +119,9 @@ namespace Project3
             timer = new Timer();
             timer.Interval = 16;
             timer.Tick += Timer_Tick;
+            GeneratePoints(null, null);
+            ControlPoints[1].Position = new Vector2(ControlPoints[1].Position.X, ControlPoints[1].Position.Y - BitmapCanvas.Height / 3);
+            ControlPoints[3].Position = new Vector2(ControlPoints[3].Position.X, ControlPoints[3].Position.Y + BitmapCanvas.Height / 3);
             CalculateBezier();
             RefreshCanvas();
         }
@@ -110,54 +130,69 @@ namespace Project3
         {
             Bitmap bitmap = new Bitmap(BitmapCanvas.Width, BitmapCanvas.Height);
 
-            if (IsPolylineVisible)
+            using (Graphics g = Graphics.FromImage(bitmap))
             {
-                using (Graphics g = Graphics.FromImage(bitmap))
+                if (IsPolylineVisible)
                 {
+
                     Pen cyan = new Pen(Color.Cyan);
                     for (int i = 0; i < PointCount - 1; i++)
                     {
                         g.DrawLine(cyan, ControlPoints[i].Point, ControlPoints[i + 1].Point);
                     }
                 }
-            }
 
-            foreach (Point p in Bezier)
-            {
-                if (p.X < bitmap.Width && p.Y < bitmap.Height && p.X > 0 && p.Y > 0)
-                    bitmap.SetPixel(p.X, p.Y, Color.Black);
-            }
+                foreach (Point p in Bezier)
+                {
+                    if (p.X < bitmap.Width && p.Y < bitmap.Height && p.X > 0 && p.Y > 0)
+                        bitmap.SetPixel(p.X, p.Y, Color.Black);
+                }
 
-            foreach (Vertex v in ControlPoints)
-            {
-                using (Graphics g = Graphics.FromImage(bitmap))
+                foreach (Vertex v in ControlPoints)
                 {
                     SolidBrush b = new SolidBrush(v.Color);
                     g.FillEllipse(b, v.X - v.Size / 2, v.Y - v.Size / 2, v.Size, v.Size);
                 }
-            }
 
-            if (State == States.Playing)
-            {
-                //if(Animation == Animations.MovingOnCurve)
+                if (State == States.Playing)
                 {
-                    using (Graphics g = Graphics.FromImage(bitmap))
+                    if (Animation == Animations.MovingOnCurve)
                     {
-                        Point p = new Point(Bezier[currentPoint].X - image.Width / 2, Bezier[currentPoint].Y - image.Height / 2);
-                        if (IsGrayscale)
+
+                        if (Rotation == Rotations.Naive)
                         {
-                            g.DrawImage(grayscaleImage, p);
+                            Bitmap rotated = IsGrayscale ? Algorithms.Rotate(Tan, grayscaleImage) : Algorithms.Rotate(Tan, image);
+                            Point p = new Point(Bezier[currentPoint].X - rotated.Width / 2, Bezier[currentPoint].Y - rotated.Height / 2);
+                            g.DrawImage(rotated, p);
                         }
                         else
                         {
-                            g.DrawImage(image, p);
+                            Point p = new Point(Bezier[currentPoint].X - image.Width / 2, Bezier[currentPoint].Y - image.Height / 2);
+                            if (IsGrayscale)
+                            {
+                                g.DrawImage(grayscaleImage, p);
+                            }
+                            else
+                            {
+                                g.DrawImage(image, p);
+                            }
+                        }
+                    }
+                    else if (Animation == Animations.Rotation)
+                    {
+                        if (Rotation == Rotations.Naive)
+                        {
+                            Bitmap rotated = IsGrayscale ? Algorithms.Rotate(Degree, grayscaleImage) : Algorithms.Rotate(Degree, image);
+                            Point p = new Point(Bezier[currentPoint].X - rotated.Width / 2, Bezier[currentPoint].Y - rotated.Height / 2);
+                            g.DrawImage(rotated, p);
                         }
                     }
                 }
+                Bitmap old = (Bitmap)BitmapCanvas.Image;
+                BitmapCanvas.Image = bitmap;
+                old.Dispose();
+                BitmapCanvas.Refresh();
             }
-
-            BitmapCanvas.Image = bitmap;
-            BitmapCanvas.Refresh();
         }
 
         private void GeneratePoints(object sender, EventArgs e)
@@ -212,8 +247,9 @@ namespace Project3
         private void CalculateBezier()
         {
             Bezier.Clear();
+            Tangents.Clear();
             GC.Collect();
-            ConcurrentBag<Point> points = new ConcurrentBag<Point>();
+            List<Point> points = new List<Point>();
 
             for (double i = 0d; i < 5000; i++)
             {
@@ -225,10 +261,21 @@ namespace Project3
                     X += Algorithms.Binom(PointCount - 1, c) * Math.Pow(1d - t, PointCount - 1 - c) * Math.Pow(t, c) * (double)ControlPoints[c].X;
                     Y += Algorithms.Binom(PointCount - 1, c) * Math.Pow(1d - t, PointCount - 1 - c) * Math.Pow(t, c) * (double)ControlPoints[c].Y;
                 }
-                points.Add(new Point((int)X, (int)Y));
+                if (points.Count == 0 || points[points.Count - 1].X != (int)X || points[points.Count - 1].Y != (int)Y)
+                {
+                    points.Add(new Point((int)X, (int)Y));
+                    X = 0;
+                    Y = 0;
+                    for (int c = 0; c < PointCount - 1; c++)
+                    {
+                        X += Algorithms.Binom(PointCount - 2, c) * Math.Pow(1d - t, PointCount - 2 - c) * Math.Pow(t, c) * (double)(ControlPoints[c + 1].X - ControlPoints[c].X) * (PointCount - 1);
+                        Y += Algorithms.Binom(PointCount - 2, c) * Math.Pow(1d - t, PointCount - 2 - c) * Math.Pow(t, c) * (double)(ControlPoints[c + 1].Y - ControlPoints[c].Y) * (PointCount - 1);
+                    }
+                    Tangents.Add(new Vector2((float)X, (float)Y));
+                }
             }
-            Bezier = points.Distinct().ToList();
-            currentPoint = Bezier.Count - 1;
+            Bezier = points.ToList();
+            currentPoint = Math.Min(Bezier.Count - 1, currentPoint);
         }
 
         private void BitmapCanvas_MouseUp(object sender, MouseEventArgs e)
@@ -254,7 +301,7 @@ namespace Project3
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 var serializer = new XmlSerializer(typeof(List<Point>));
-                using (var stream = File.OpenWrite(dialog.FileName))
+                using (var stream = File.Create(dialog.FileName))
                 {
                     List<Point> points = new List<Point>();
                     foreach (Vertex v in ControlPoints)
@@ -302,8 +349,6 @@ namespace Project3
                 image = new Bitmap(dialog.FileName);
                 grayscaleImage = new Bitmap(dialog.FileName);
                 thumbnail = new Bitmap(image, new Size(50, 50));
-                grayscaleThumbnail = new Bitmap(image, new Size(50, 50));
-
                 for (int x = 0; x < grayscaleImage.Width; x++)
                 {
                     for (int y = 0; y < grayscaleImage.Height; y++)
@@ -346,13 +391,17 @@ namespace Project3
         {
             if (Animation == Animations.MovingOnCurve)
             {
-                currentPoint--;
-                if (currentPoint == 0)
+                currentPoint++;
+                if (currentPoint >= Bezier.Count)
                 {
-                    currentPoint = Bezier.Count - 1;
+                    currentPoint = 0;
                     GC.Collect();
                 }
-
+            }
+            else if (Animation == Animations.Rotation)
+            {
+                deg = deg + 1;
+                if (deg == 360) deg = 0;
             }
             RefreshCanvas();
         }

@@ -156,7 +156,7 @@
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer5);
             this.splitContainer1.Size = new System.Drawing.Size(784, 466);
-            this.splitContainer1.SplitterDistance = 590;
+            this.splitContainer1.SplitterDistance = 592;
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -168,7 +168,7 @@
             this.BitmapCanvas.Location = new System.Drawing.Point(0, 0);
             this.BitmapCanvas.Margin = new System.Windows.Forms.Padding(0);
             this.BitmapCanvas.Name = "BitmapCanvas";
-            this.BitmapCanvas.Size = new System.Drawing.Size(590, 466);
+            this.BitmapCanvas.Size = new System.Drawing.Size(592, 466);
             this.BitmapCanvas.TabIndex = 0;
             this.BitmapCanvas.TabStop = false;
             this.BitmapCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BitmapCanvas_MouseDown);
@@ -191,7 +191,7 @@
             // splitContainer5.Panel2
             // 
             this.splitContainer5.Panel2.Controls.Add(this.splitContainer6);
-            this.splitContainer5.Size = new System.Drawing.Size(192, 466);
+            this.splitContainer5.Size = new System.Drawing.Size(190, 466);
             this.splitContainer5.SplitterDistance = 150;
             this.splitContainer5.TabIndex = 0;
             // 
@@ -206,7 +206,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(192, 150);
+            this.groupBox1.Size = new System.Drawing.Size(190, 150);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bezier\'s curve";
@@ -240,7 +240,7 @@
             this.isPolylineVisibleBox.Location = new System.Drawing.Point(3, 72);
             this.isPolylineVisibleBox.Name = "isPolylineVisibleBox";
             this.isPolylineVisibleBox.Padding = new System.Windows.Forms.Padding(5, 10, 5, 10);
-            this.isPolylineVisibleBox.Size = new System.Drawing.Size(186, 37);
+            this.isPolylineVisibleBox.Size = new System.Drawing.Size(184, 37);
             this.isPolylineVisibleBox.TabIndex = 3;
             this.isPolylineVisibleBox.Text = "Visible polyline";
             this.isPolylineVisibleBox.UseVisualStyleBackColor = true;
@@ -252,7 +252,7 @@
             this.button1.Location = new System.Drawing.Point(3, 49);
             this.button1.Margin = new System.Windows.Forms.Padding(5);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(186, 23);
+            this.button1.Size = new System.Drawing.Size(184, 23);
             this.button1.TabIndex = 2;
             this.button1.Text = "Generate";
             this.button1.UseVisualStyleBackColor = true;
@@ -307,7 +307,7 @@
             // splitContainer6.Panel2
             // 
             this.splitContainer6.Panel2.Controls.Add(this.splitContainer7);
-            this.splitContainer6.Size = new System.Drawing.Size(192, 312);
+            this.splitContainer6.Size = new System.Drawing.Size(190, 312);
             this.splitContainer6.SplitterDistance = 80;
             this.splitContainer6.TabIndex = 0;
             // 
@@ -319,7 +319,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(192, 80);
+            this.groupBox2.Size = new System.Drawing.Size(190, 80);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Image";
@@ -369,7 +369,7 @@
             // splitContainer7.Panel2
             // 
             this.splitContainer7.Panel2.Controls.Add(this.splitContainer8);
-            this.splitContainer7.Size = new System.Drawing.Size(192, 228);
+            this.splitContainer7.Size = new System.Drawing.Size(190, 228);
             this.splitContainer7.SplitterDistance = 80;
             this.splitContainer7.TabIndex = 1;
             // 
@@ -380,7 +380,7 @@
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox3.Location = new System.Drawing.Point(0, 0);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(192, 80);
+            this.groupBox3.Size = new System.Drawing.Size(190, 80);
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Rotating";
@@ -389,10 +389,11 @@
             // 
             this.FilteredRadioButton.AutoSize = true;
             this.FilteredRadioButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.FilteredRadioButton.Enabled = false;
             this.FilteredRadioButton.Location = new System.Drawing.Point(3, 43);
             this.FilteredRadioButton.Name = "FilteredRadioButton";
             this.FilteredRadioButton.Padding = new System.Windows.Forms.Padding(5);
-            this.FilteredRadioButton.Size = new System.Drawing.Size(186, 27);
+            this.FilteredRadioButton.Size = new System.Drawing.Size(184, 27);
             this.FilteredRadioButton.TabIndex = 1;
             this.FilteredRadioButton.TabStop = true;
             this.FilteredRadioButton.Text = "With filtering";
@@ -406,7 +407,7 @@
             this.NaiveRadioButton.Location = new System.Drawing.Point(3, 16);
             this.NaiveRadioButton.Name = "NaiveRadioButton";
             this.NaiveRadioButton.Padding = new System.Windows.Forms.Padding(5);
-            this.NaiveRadioButton.Size = new System.Drawing.Size(186, 27);
+            this.NaiveRadioButton.Size = new System.Drawing.Size(184, 27);
             this.NaiveRadioButton.TabIndex = 0;
             this.NaiveRadioButton.TabStop = true;
             this.NaiveRadioButton.Text = "Naive";
@@ -430,7 +431,7 @@
             // 
             this.splitContainer8.Panel2.Controls.Add(this.StopButton);
             this.splitContainer8.Panel2.Controls.Add(this.StartButton);
-            this.splitContainer8.Size = new System.Drawing.Size(192, 144);
+            this.splitContainer8.Size = new System.Drawing.Size(190, 144);
             this.splitContainer8.SplitterDistance = 80;
             this.splitContainer8.TabIndex = 1;
             // 
@@ -441,7 +442,7 @@
             this.groupBox4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox4.Location = new System.Drawing.Point(0, 0);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(192, 80);
+            this.groupBox4.Size = new System.Drawing.Size(190, 80);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Animation";
@@ -454,7 +455,7 @@
             this.MoveRadioButton.Location = new System.Drawing.Point(3, 43);
             this.MoveRadioButton.Name = "MoveRadioButton";
             this.MoveRadioButton.Padding = new System.Windows.Forms.Padding(5);
-            this.MoveRadioButton.Size = new System.Drawing.Size(186, 27);
+            this.MoveRadioButton.Size = new System.Drawing.Size(184, 27);
             this.MoveRadioButton.TabIndex = 3;
             this.MoveRadioButton.TabStop = true;
             this.MoveRadioButton.Text = "Moving on the curve";
@@ -467,7 +468,7 @@
             this.RotationRadioButton.Location = new System.Drawing.Point(3, 16);
             this.RotationRadioButton.Name = "RotationRadioButton";
             this.RotationRadioButton.Padding = new System.Windows.Forms.Padding(5);
-            this.RotationRadioButton.Size = new System.Drawing.Size(186, 27);
+            this.RotationRadioButton.Size = new System.Drawing.Size(184, 27);
             this.RotationRadioButton.TabIndex = 2;
             this.RotationRadioButton.Text = "Rotation";
             this.RotationRadioButton.UseVisualStyleBackColor = true;
